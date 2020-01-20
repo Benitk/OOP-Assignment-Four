@@ -209,7 +209,7 @@ public class AutomaticPlayer {
 						r.setTarget(null);
 
 					}
-					if(r.getSpeed() < 2. && getGUI().getRobList().size() < 2) {
+					if(r.getSpeed() < 3 && getGUI().getRobList().size() < 2) {
 						getGUI().getGame().chooseNextEdge(i, nextValueAuto(r.getSrc(), i));
 					}
 					else {
