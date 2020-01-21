@@ -729,7 +729,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 				return 0;
 
 			int level = Integer.parseInt(input);
-			if(level < 0 || level > 23)
+			if(level < -1 || level > 23)
 				return 0;
 
 			return level;
