@@ -11,15 +11,18 @@ public class Fruits {
 	}
 	
 	
-	
+	// empty constructor
 	public Fruits() {
-		// TODO Auto-generated constructor stub
+		setType(1);
+		setValue(0);
+		setPosX(0);
+		setPosY(0);
 	}
 
 
 
 	/**
-	 * init new graph from string
+	 * init new fruit from string
 	 * @param g - string with json format
 	 */
 	public void init(String f) {

@@ -15,12 +15,20 @@ public class Robots {
 		init(r);
 	}
 
+	// empty constructor
 	public Robots() {
-		// TODO Auto-generated constructor stub
+		setId(0);
+		setSrc(0);
+		setDest(-1);
+		setValue(0);
+		setPosX(0);
+		setPosY(0);
+		setSpeed(0);
+		
 	}
 
 	/**
-	 * init new graph from string
+	 * init new robot from string
 	 * @param g - string with json format
 	 */
 	public void init(String r) {

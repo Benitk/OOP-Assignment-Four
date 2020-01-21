@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import Server.Game_Server;
+import Server.game_service;
 import dataStructure.DGraph;
 import dataStructure.nodeData;
 import utils.Point3D;
@@ -15,6 +17,8 @@ import utils.Point3D;
 
 class DGraphTest {
 	private static final DGraph dg1=new DGraph();
+	private static final DGraph dg2=new DGraph();
+	private static game_service _game = Game_Server.getServer(0);
 
 	 static Point3D p01=new Point3D(20,14);
 	 static Point3D p11=new Point3D(-4.0,4.0);
@@ -50,6 +54,8 @@ class DGraphTest {
 	    	dg1.connect(5,0,4);
 			dg1.connect(4,0,2);
 			dg1.connect(0,1,1.2);
+			
+			dg2.init(_game.getGraph());
 			
 		}
 	@Test
@@ -108,4 +114,18 @@ class DGraphTest {
 		assertEquals(expectedRangeY[0], dg1.GraphScaleY().get_min(),"ScaleY Test");
 		assertEquals(expectedRangeY[1], dg1.GraphScaleY().get_max(),"ScaleY Test");
 	}
+	
+	@Test
+	void initTest() {
+		double weight_expected = 1.4004465106761335;
+		double weight_actual  = dg2.getEdge(0, 1).getWeight();
+		double posX_expected = 35.18753053591606;
+		double posY_expected = 32.10378225882353;
+		double posX_actual = dg2.getNode(0).getLocation().x();
+		double posY_actual = dg2.getNode(0).getLocation().y(); 
+		assertEquals(weight_expected, weight_actual, "initTest, edge weight");
+		assertEquals(posX_expected, posX_actual, "initTest, posX weight");
+		assertEquals(posY_expected, posY_actual, "initTest, posY weight");
+	}
+	
 }
