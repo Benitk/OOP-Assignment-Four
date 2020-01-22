@@ -22,7 +22,7 @@ public class SimpleDB {
 	public static void main(String[] args) {
 			int id1 = 999;  // "dummy existing ID  
 			int level = 0;
-			allUsers();
+			//allUsers();
 			printLog();
 			String kml = getKML(id1,level);
 			System.out.println("***** KML file example: ******");
@@ -32,18 +32,22 @@ public class SimpleDB {
 	 * 
 	 */
 		public static void printLog() {
+			int max=0;
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
 				Connection connection = 
 						DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcUserPassword);
 				Statement statement = connection.createStatement();
-				String allCustomersQuery = "SELECT * FROM Logs;";
+				String allCustomersQuery = "SELECT * FROM Logs WHERE levelID=11 AND UserID<>0 AND UserID<>999";
 				ResultSet resultSet = statement.executeQuery(allCustomersQuery);
 				
 				while(resultSet.next())
 				{
-					System.out.println("Id: " + resultSet.getInt("UserID")+","+resultSet.getInt("levelID")+","+resultSet.getInt("moves")+","+resultSet.getDate("time"));
+					if(resultSet.getInt("score")>max && resultSet.getInt("moves")<=580)
+						max=resultSet.getInt("score");
+					System.out.println("Id: " + resultSet.getInt("UserID")+",Level: "+resultSet.getInt("levelID")+",Move: "+resultSet.getInt("moves")+",grade: "+resultSet.getInt("score")+","+resultSet.getDate("time"));
 				}
+				System.out.println(max);
 				resultSet.close();
 				statement.close();		
 				connection.close();		

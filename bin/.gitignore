@@ -1,6 +1,9 @@
 /.DS_Store
 /Test/
+<<<<<<< HEAD
 /algorithms/
 /dataStructure/
 /gameClient/
+=======
+>>>>>>> 1869a9859b06f4f0a3ccd18d139fa3bcf95283d9
 /utils/

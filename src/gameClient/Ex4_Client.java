@@ -56,21 +56,12 @@ public class Ex4_Client implements Runnable{
 		int ind=0;
 		long dt=200;
 		int jj = 0;
-		while(game.isRunning()) {
-			moveRobots(game, gg);
-			try {
-				List<String> stat = game.getRobots();
-				for(int i=0;i<stat.size();i++) {
-					System.out.println(jj+") "+stat.get(i));
-				}
-				ind++;
-				Thread.sleep(dt);
-				jj++;
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
+		
+		  while(game.isRunning()) { moveRobots(game, gg); try { List<String> stat =
+		  game.getRobots(); for(int i=0;i<stat.size();i++) {
+		  System.out.println(jj+") "+stat.get(i)); } ind++; Thread.sleep(dt); jj++; }
+		  catch(Exception e) { e.printStackTrace(); } }
+		 
 		String res = game.toString();
 		String remark = "This string should be a KML file!!";
 		game.sendKML(remark); // Should be your KML (will not work on case -1).

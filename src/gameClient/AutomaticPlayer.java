@@ -81,7 +81,7 @@ public class AutomaticPlayer {
 					fruitLocation = getGameAlgo().nearestNode(r.getTarget());
 					robNodeList_size = r.getNextDest().size();
 					
-					// fruit changes is place or other robot took it clear nextDest list
+					// fruit change is place or other robot took it clear nextDest list
 					if(r.getNextDest().get(robNodeList_size - 1).getKey() != fruitLocation[1]) {
 						r.getNextDest().clear();
 					}

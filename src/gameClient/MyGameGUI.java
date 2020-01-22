@@ -39,6 +39,7 @@ public class MyGameGUI implements Runnable {
 	 */
 	public MyGameGUI() {
 		int scenario = StdDraw.dialogScenario();
+		Game_Server.login(999);
 		game_service game = Game_Server.getServer(scenario); // you have [0,23] games
 
 		// user choice of game type (manual or automatic)
@@ -77,6 +78,7 @@ public class MyGameGUI implements Runnable {
 		drawRobots();
 		StdDraw.enableDoubleBuffering();
 		StdDraw.show();
+		
 
 		_t = new Thread(this);
 		_t.start();
@@ -100,9 +102,18 @@ public class MyGameGUI implements Runnable {
 		music();
 		while(this.getGame().isRunning()) {			
 			if(getType() == 1) {
-				this.getAutoPlayer().moveRobotsAuto();
+
+				getAutoPlayer().moveRobotsAuto();
+				try {
+					Thread.sleep(59);
+					
+				} catch (InterruptedException e) {
+
+					e.printStackTrace();
+				}
+				
 			}else {
-				this.getManual().moveRobotsGUI();
+				getManual().moveRobotsGUI();
 			}
 			repaint();
 		}
@@ -125,7 +136,7 @@ public class MyGameGUI implements Runnable {
 			StdDraw.text(0, 3, "Game over:");
 			StdDraw.setFont(new Font("Arial", Font.PLAIN, 25));
 			StdDraw.text(0,2, "you did "+moves+" Moves");
-			StdDraw.text(0,1.5, "Your Grade is: "+Score);
+			StdDraw.text(0,1.5, "Your Score is: "+Score);
 			StdDraw.show();
 
 		} catch (JSONException e) {
@@ -191,8 +202,8 @@ public class MyGameGUI implements Runnable {
 		StdDraw.clear();
 		Range x = this.get_x();
 		Range y = this.get_y();
-		
-		
+
+
 
 		StdDraw.setXscale(x.get_min() - x.get_min() * (_eps*_eps*10), x.get_max() + x.get_min() * (_eps*_eps*10));
 		StdDraw.setYscale(y.get_min() - y.get_min() * (_eps*_eps*10), y.get_max() + y.get_min() * (_eps*_eps*10));
@@ -264,14 +275,37 @@ public class MyGameGUI implements Runnable {
 			// drawGraph timer
 			StdDraw.text(this.get_x().get_max() - _eps*2, this.get_y().get_min(), "Time: " + this.getGame().timeToEnd());
 
+			// draw delay
+			StdDraw.text(this.get_x().get_max() - _eps*5, this.get_y().get_min(), "Delay: " + _delay);
+
 			// manual game - drawing the icon near to the robot_id
 			if(getType() != 1) {
 				for(int i = 0; i < 5; i++) {
 					StdDraw.picture(get_x().get_min() + _eps*i + _eps, get_y().get_min()+_eps*_eps, "icons\\p"+i+".png");
 					StdDraw.text(get_x().get_min() + _eps*i + _eps, get_y().get_min()+_eps*_eps*300, "id-"+i+"");
-					}
+				}
 			}
-			
+
+		}
+	}
+
+	private void lowestDelay() {
+		long lowest = Long.MAX_VALUE;
+		for(Robots r: getRobList()) {
+			if(r.getDest() != -1) {
+				double current = getAutoPlayer().getGameAlgo().delayCalc(r);
+				long seconds = (long)current;
+				long milli = (long)((current - seconds) * 500);
+				if(lowest > milli) {
+					lowest = milli;
+				}
+			}
+		}
+
+
+		if(lowest != Long.MAX_VALUE) {
+			System.out.println(lowest);
+		_delay = lowest;
 		}
 	}
 
@@ -294,33 +328,33 @@ public class MyGameGUI implements Runnable {
 	/**
 	 * playing music while the game running
 	 */
-	 private void music() 
-	    {       
-	        AudioPlayer MGP = AudioPlayer.player;
-	        AudioStream BGM;
-	        AudioData MD;
+	private void music() 
+	{       
+		AudioPlayer MGP = AudioPlayer.player;
+		AudioStream BGM;
+		AudioData MD;
 
-	        ContinuousAudioDataStream loop = null;
+		ContinuousAudioDataStream loop = null;
 
-	        try
-	        {
-	            InputStream test = new FileInputStream("icons\\Pokemon.wav");
-	            BGM = new AudioStream(test);
-	            AudioPlayer.player.start(BGM);
-	            MD = BGM.getData();
-	            
-	            loop = new ContinuousAudioDataStream(MD);
+		try
+		{
+			InputStream test = new FileInputStream("icons\\Pokemon.wav");
+			BGM = new AudioStream(test);
+			AudioPlayer.player.start(BGM);
+			MD = BGM.getData();
 
-	        }
-	        catch(FileNotFoundException e){
-	            
-	        }
-	        catch(IOException error)
-	        {
-	            
-	        }
-	        MGP.start(loop);
-	    }
+			loop = new ContinuousAudioDataStream(MD);
+
+		}
+		catch(FileNotFoundException e){
+
+		}
+		catch(IOException error)
+		{
+
+		}
+		MGP.start(loop);
+	}
 
 
 
@@ -363,6 +397,8 @@ public class MyGameGUI implements Runnable {
 
 
 	/****private  data *****/
+	private DBscore DB =new DBscore();
+	private static long _delay = 0;
 	private Thread _t;
 	private AutomaticPlayer _auto;
 	private ManualPlayer _manual;

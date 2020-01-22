@@ -97,7 +97,7 @@ public class GameAlgo {
 				dest = edge.getNodeDest();
 
 				/*if (dest.getKey() > src.getKey()) {*/
-				flag = distance(src.getLocation(), dest.getLocation(), new Point3D(f.getPosX(), f.getPosY()));
+				flag = distanceTriangle(src.getLocation(), dest.getLocation(), new Point3D(f.getPosX(), f.getPosY()));
 				if (flag) {
 					// check higher node key
 					int higher = src.getKey() - dest.getKey();
@@ -145,13 +145,37 @@ public class GameAlgo {
 	 * @param f  - fruit point 
 	 * @return
 	 */
-	private boolean distance(Point3D n1, Point3D n2, Point3D f) {
+	private boolean distanceTriangle(Point3D n1, Point3D n2, Point3D f) {
 		if (n1.distance2D(f) + f.distance2D(n2) - eps <= n1.distance2D(n2))
 			return true;
 		return false;
 	}
 	
-
+	
+	/**
+	 * this method calculates time by simple formula distance(weight)/speed == time
+	 * using distance2D to get the ratio of between the robot to target and the edge
+	 * @param r - robot
+	 * @return double - the delay time the robot need to catch the fruit
+	 */
+	public double delayCalc(Robots r) {
+		Point3D p_rob = new Point3D(r.getPosX(),r.getPosY());
+		Point3D p_src = getGraphAlgo().get_Dgraph().getNode(r.getSrc()).getLocation();
+		Point3D p_dest = getGraphAlgo().get_Dgraph().getNode(r.getDest()).getLocation();
+		
+		// robot on the fruit edge
+		if(r.getNextDest().size() == 1) {
+			Point3D p_fruit = new Point3D(r.getTarget().getPosX(),r.getTarget().getPosY());
+			double ratio = p_rob.distance2D(p_fruit)/ p_src.distance2D(p_dest);
+			double edge_weight = getGraphAlgo().get_Dgraph().getEdge(r.getSrc(), r.getDest()).getWeight();
+			return (ratio * edge_weight) / r.getSpeed();
+		}
+		// robot didnt reach the fruit
+		double ratio = p_rob.distance2D(p_dest)/ p_src.distance2D(p_dest);
+		double edge_weight = getGraphAlgo().get_Dgraph().getEdge(r.getSrc(), r.getDest()).getWeight();
+		return (ratio * edge_weight) / r.getSpeed();
+	}
+	
 
 /** private data ***/
 	private Graph_Algo _graphAlgo;
