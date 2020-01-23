@@ -42,7 +42,7 @@ public class MyGameGUI implements Runnable {
 		int scenario = StdDraw.dialogScenario();
 		int ID=StdDraw.insertID();
 		DBscore.setID(ID);
-		Game_Server.login(315026807);
+		Game_Server.login(ID);
 		game_service game = Game_Server.getServer(scenario); // you have [0,23] games
 
 		// user choice of game type (manual or automatic)
