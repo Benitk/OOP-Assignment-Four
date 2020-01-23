@@ -23,7 +23,7 @@ public class SimpleDB {
 			int id1 = 999;  // "dummy existing ID  
 			int level = 0;
 			allUsers();
-			printLog();
+			//printLog();
 			String kml = getKML(id1,level);
 			System.out.println("***** KML file example: ******");
 			System.out.println(kml);
@@ -88,7 +88,7 @@ public class SimpleDB {
 			}
 		public static int allUsers() {
 			int ans = 0;
-			String allCustomersQuery = "SELECT * FROM Users;";
+			String allCustomersQuery = "SELECT * FROM Users where userID=999;";
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
 				Connection connection = 

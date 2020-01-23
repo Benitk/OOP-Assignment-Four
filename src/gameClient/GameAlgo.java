@@ -8,9 +8,10 @@ import dataStructure.edge_data;
 import dataStructure.nodeData;
 import dataStructure.node_data;
 import utils.Point3D;
+import utils.Range;
 
 public class GameAlgo {
-	
+
 	public GameAlgo(Graph_Algo ga) {
 		setGraphAlgo(ga);
 	}
@@ -48,7 +49,7 @@ public class GameAlgo {
 		return closest;
 	}
 
-	
+
 	/**
 	 * checking values of each fruit in the list and return the most valuable fruit
 	 * @param list - fruit list
@@ -78,6 +79,7 @@ public class GameAlgo {
 	 */
 	public int[] nearestNode(Fruits f) {
 		if(f == null) {
+			System.out.println("found null");
 			return null;
 		}
 
@@ -96,7 +98,6 @@ public class GameAlgo {
 				edge = (edgeData) ((edges).get(j));
 				dest = edge.getNodeDest();
 
-				/*if (dest.getKey() > src.getKey()) {*/
 				flag = distanceTriangle(src.getLocation(), dest.getLocation(), new Point3D(f.getPosX(), f.getPosY()));
 				if (flag) {
 					// check higher node key
@@ -125,15 +126,11 @@ public class GameAlgo {
 						return ans;
 					}
 				}
-				/* } */
 			}
 			edges.clear();
 		}
-		// not found
-
-
+		// not found ans [-1, 0]
 		ans[0] = -1;
-		ans[1] = -1;
 		return ans;
 	}
 
@@ -151,41 +148,65 @@ public class GameAlgo {
 		return false;
 	}
 	
+
 	
 	/**
-	 * this method calculates time by simple formula distance(weight)/speed == time
-	 * using distance2D to get the ratio of between the robot to target and the edge
-	 * @param r - robot
-	 * @return double - the delay time the robot need to catch the fruit
+	 * this method decide if a robot should take a fruit or not by checking bound(nodes number)
+	 * @param robot_num
+	 * @param robot_id
+	 * @param f - fruit
+	 * @param numOfnodes
+	 * @return true fruit is in the right area else false
 	 */
-	public double delayCalc(Robots r) {
-		Point3D p_rob = new Point3D(r.getPosX(),r.getPosY());
-		Point3D p_src = getGraphAlgo().get_Dgraph().getNode(r.getSrc()).getLocation();
-		Point3D p_dest = getGraphAlgo().get_Dgraph().getNode(r.getDest()).getLocation();
-		
-		// robot on the fruit edge
-		if(r.getNextDest().size() == 1) {
-			Point3D p_fruit = new Point3D(r.getTarget().getPosX(),r.getTarget().getPosY());
-			double ratio = p_rob.distance2D(p_fruit)/ p_src.distance2D(p_dest);
-			double edge_weight = getGraphAlgo().get_Dgraph().getEdge(r.getSrc(), r.getDest()).getWeight();
-			return (ratio * edge_weight) / r.getSpeed();
+	public boolean TeamWork_nodesNum(int robot_num, int robot_id, Fruits f) {
+		if(f == null) {
+			System.out.println("kombia");
+			return false;
 		}
-		// robot didnt reach the fruit
-		double ratio = p_rob.distance2D(p_dest)/ p_src.distance2D(p_dest);
-		double edge_weight = getGraphAlgo().get_Dgraph().getEdge(r.getSrc(), r.getDest()).getWeight();
-		return (ratio * edge_weight) / r.getSpeed();
+		// bound could be odd
+		int bound = (getGraphAlgo().get_Dgraph().nodeSize()+1)/robot_num;
+		
+		int fruitDestNode = nearestNode(f)[1];
+		System.out.println(fruitDestNode);
+		if(bound * (robot_id+1) > fruitDestNode && bound * robot_id <= fruitDestNode) {
+			return true;
+		}
+		return false;
 	}
 	
+	/**
+	 * this method decide if a robot should take a fruit or not by checking bound
+	 * @param robot_num
+	 * @param robot_id
+	 * @param f - fruit
+	 * @param numOfnodes
+	 * @return true fruit is in the right area else false
+	 */
+	public boolean TeamWork_areas(int robot_num, int robot_id, Fruits f) {
+		if(f == null) {
+			return false;
+		}
+		// bound could be odd
+		Range range = getGraphAlgo().get_Dgraph().GraphScaleX();
+		double area = range.get_length()/robot_num;
+		double fruitDestNode = getGraphAlgo().get_Dgraph().getNode(nearestNode(f)[1]).getLocation().x();
+		if(range.get_min() + area * (robot_id+1) >= fruitDestNode && range.get_min() + area * (robot_id) < fruitDestNode) {
+			return true;
+		}
+		return false;
+	}
 
-/** private data ***/
+
+
+	/** private data ***/
 	private Graph_Algo _graphAlgo;
 	private final double eps = 0.000001;
-	
-	
+
+
 	/** getter/setter ***/
-	
-	
-	
+
+
+
 	public Graph_Algo getGraphAlgo() {
 		return _graphAlgo;
 	}
