@@ -788,6 +788,13 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 			return 1;
 		}
 	}
+	public static int insertID() {
+		String x = JOptionPane.showInputDialog(null, "Please insert ID");
+		if(isNumericArray(x))
+			return Integer.parseInt(x);
+		return 0;
+		
+	}
 
 	/**
 	 * asking user if he wants to save that game to kml file

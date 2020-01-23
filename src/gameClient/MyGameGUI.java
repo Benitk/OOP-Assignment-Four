@@ -39,7 +39,8 @@ public class MyGameGUI implements Runnable {
 	 */
 	public MyGameGUI() {
 		int scenario = StdDraw.dialogScenario();
-		Game_Server.login(999);
+		int ID=StdDraw.insertID();
+		Game_Server.login(ID);
 		game_service game = Game_Server.getServer(scenario); // you have [0,23] games
 
 		// user choice of game type (manual or automatic)
@@ -397,7 +398,7 @@ public class MyGameGUI implements Runnable {
 
 
 	/****private  data *****/
-	private DBscore DB =new DBscore();
+	
 	private static long _delay = 0;
 	private Thread _t;
 	private AutomaticPlayer _auto;

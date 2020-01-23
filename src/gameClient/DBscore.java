@@ -22,28 +22,6 @@ public class DBscore {
 	public static final String jdbcUser="student";
 	public static final String jdbcUserPassword="OOP2020student";
 
-	/**
-	 * Simple main for demonstrating the use of the Data-base
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		int id1 = 999;  // "dummy existing ID  
-		int level = 0;
-		//allUsers();
-		//printLog();
-		//myscore(315149500);
-		//myplaceinKita(315149500);
-		for(int i=0;i<11;i++)
-			System.out.println(Arrays.toString(getMyrecord()[i]));
-		System.out.println("************myplace************");
-		for(int i=0;i<11;i++)
-			System.out.println(Arrays.toString(getMyplace()[i]));
-		System.out.println("number of game:"+getCountGame());
-		System.out.println("your level:"+getMyLevel());
-		String kml = getKML(id1,level);
-		System.out.println("***** KML file example: ******");
-		System.out.println(kml);
-	}
 	/** simply prints all the games as played by the users (in the database).
 	 * 
 	 */
@@ -59,7 +37,7 @@ public class DBscore {
 
 			while(resultSet.next())
 			{
-				System.out.println(resultSet.getInt("userID")+","+resultSet.getInt("MAX(score)"));
+				System.out.println(resultSet.getInt("userID")+","+resultSet.getInt("MAX(score)")+","+resultSet.getInt("levelID"));
 				
 				
 //				if(resultSet.getInt("score")>max ) 
@@ -112,33 +90,10 @@ public class DBscore {
 		}
 		return ans;
 	}
-	public static int allUsers() {
-		int ans = 0;
-		String allCustomersQuery = "SELECT * FROM Users;";
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection connection = 
-					DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcUserPassword);		
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(allCustomersQuery);
-			while(resultSet.next()) {
-				System.out.println("Id: " + resultSet.getInt("UserID"));
-				ans++;
-			}
-			resultSet.close();
-			statement.close();		
-			connection.close();
-		}
-		catch (SQLException sqle) {
-			System.out.println("SQLException: " + sqle.getMessage());
-			System.out.println("Vendor Error: " + sqle.getErrorCode());
-		}
-
-		catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return ans;
-	}
+	
+	/*
+	 * update my place in the class in all the levels
+	 */
 	public static void myplaceinKita(int id) {
 
 		for(int i=0;i<level.length;i++) {
@@ -192,7 +147,9 @@ public class DBscore {
 
 
 	}
-
+	/*
+	 * update my score in all the levels,my number of games,and my level.
+	 */
 	public static void myscore(int id) {
 		int countgame=0;
 		int mylevel=0;
