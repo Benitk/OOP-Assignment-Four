@@ -2,6 +2,7 @@ package gameClient;
 
 
 import java.io.File;
+import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.Iterator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -178,11 +180,14 @@ public class KML_Logger {
 	public void Placemark(int id, double posX, double posY, String time){
 		Element Placemark = getDocument().createElement("Placemark");
 		getGame().appendChild(Placemark);
-		Element TimeRemaining= getDocument().createElement("TimeStamp");
-		Placemark.appendChild(TimeRemaining);
-		Element when = getDocument().createElement("when");
-		when.appendChild(getDocument().createTextNode(""+time));
-		TimeRemaining.appendChild(when);
+		// nodes should be shown always
+		if(id != 7) {
+			Element TimeRemaining= getDocument().createElement("TimeStamp");
+			Placemark.appendChild(TimeRemaining);
+			Element when = getDocument().createElement("when");
+			when.appendChild(getDocument().createTextNode(""+time));
+			TimeRemaining.appendChild(when);
+		}
 		Element robot = getDocument().createElement("styleUrl");
 		robot.appendChild(getDocument().createTextNode(IconId(id)));
 		Placemark.appendChild(robot);
@@ -232,6 +237,31 @@ public class KML_Logger {
 		String time2 = d2.format(date);
 		return time1+"T"+time2+"Z";
 		}
+	
+	 /**
+	  * 
+	  * @param elem
+	  * @return string - convert element to string
+	  */
+	 public String printKml(Document doc) {
+			String output = "";
+			try {
+				Transformer transformer = TransformerFactory.newInstance().newTransformer();
+				transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+				StreamResult result = new StreamResult(new StringWriter());
+				DOMSource source = new DOMSource(doc);
+				transformer.transform(source, result);
+
+				output = result.getWriter().toString();
+				
+			} catch (TransformerException e) {
+				e.printStackTrace();
+			}
+			return output;
+		}
+	
+	
 	
 	/**** private data *****/
 	private Element _game;

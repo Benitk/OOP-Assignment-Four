@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import Server.Game_Server;
 import Server.game_service;
 import algorithms.Graph_Algo;
+import utils.Point3D;
 import utils.Range;
 import utils.StdDraw;
 import dataStructure.DGraph;
@@ -38,6 +39,7 @@ public class MyGameGUI implements Runnable {
 	 * init the game by getting input from user about the scenario number and type of game(manual or auto)
 	 */
 	public MyGameGUI() {
+		Game_Server.login(315026807);
 		int scenario = StdDraw.dialogScenario();
 		int ID=StdDraw.insertID();
 		Game_Server.login(ID);
@@ -83,6 +85,7 @@ public class MyGameGUI implements Runnable {
 
 		_t = new Thread(this);
 		_t.start();
+		music();
 
 	}
 
@@ -99,21 +102,16 @@ public class MyGameGUI implements Runnable {
 	 */
 	@Override
 	public void run() {
-		this.getGame().startGame();
-		music();
-		while(this.getGame().isRunning()) {			
+		getGame().startGame();
+		//double time = getGame().timeToEnd(); 
+		while(getGame().isRunning()) {
 			if(getType() == 1) {
-
 				getAutoPlayer().moveRobotsAuto();
-				try {
-					Thread.sleep(59);
-					
-				} catch (InterruptedException e) {
 
-					e.printStackTrace();
-				}
-				
+				try{Thread.sleep(Delay());} catch(InterruptedException e){}
+				System.out.println(Delay());
 			}else {
+				getGame().move();
 				getManual().moveRobotsGUI();
 			}
 			repaint();
@@ -144,6 +142,7 @@ public class MyGameGUI implements Runnable {
 			e.printStackTrace();
 		}
 		if(StdDraw.dialogKML() == 0) {
+			getGame().sendKML(getKml().printKml(getKml().getDocument()));
 			getKml().KMLtoFile();
 		}
 	}
@@ -274,11 +273,17 @@ public class MyGameGUI implements Runnable {
 					String.valueOf(current.getKey()));
 
 			// drawGraph timer
-			StdDraw.text(this.get_x().get_max() - _eps*2, this.get_y().get_min(), "Time: " + this.getGame().timeToEnd());
+			StdDraw.text(this.get_x().get_max() - _eps*3, this.get_y().get_max(), "Time: " + this.getGame().timeToEnd()/1000);
 
-			// draw delay
-			StdDraw.text(this.get_x().get_max() - _eps*5, this.get_y().get_min(), "Delay: " + _delay);
+			if(getGame().isRunning()) {
+				// draw score
+				double score = 0;
+				for(int i = 0; i < getRobList().size(); i++) {
+					score += getRobList().get(i).getValue();
+				}
+				StdDraw.text(this.get_x().get_max() - _eps*6, this.get_y().get_max(), "Score: " + score);
 
+			}
 			// manual game - drawing the icon near to the robot_id
 			if(getType() != 1) {
 				for(int i = 0; i < 5; i++) {
@@ -290,25 +295,25 @@ public class MyGameGUI implements Runnable {
 		}
 	}
 
-	private void lowestDelay() {
-		long lowest = Long.MAX_VALUE;
-		for(Robots r: getRobList()) {
-			if(r.getDest() != -1) {
-				double current = getAutoPlayer().getGameAlgo().delayCalc(r);
-				long seconds = (long)current;
-				long milli = (long)((current - seconds) * 500);
-				if(lowest > milli) {
-					lowest = milli;
-				}
+	/**
+	 * this method calculates time by simple formula if any robot is on the right edge as fruit
+	 * divid the current delay by 2
+	 * @param r - robot
+	 * @return double - the delay time the robot need to catch the fruit
+	 */
+	private long Delay() {
+		long lowest = _delay;
+		int fruitEdge[] = new int[2];
+		for(int r = 0; r < getRobList().size(); r++) {
+			for(int f = 0; f < getFruitList().size(); f++) {
+				fruitEdge = getAutoPlayer().getGameAlgo().nearestNode(getFruitList().get(f));
+				if(fruitEdge[0] == getRobList().get(r).getSrc() || fruitEdge[1] == getRobList().get(r).getSrc())
+					return lowest/(2);
 			}
 		}
-
-
-		if(lowest != Long.MAX_VALUE) {
-			System.out.println(lowest);
-		_delay = lowest;
-		}
+		return lowest;
 	}
+
 
 
 	/**
@@ -356,6 +361,10 @@ public class MyGameGUI implements Runnable {
 		}
 		MGP.start(loop);
 	}
+	
+	public static void main(String[] args) {
+		MyGameGUI gui = new MyGameGUI();
+	}
 
 
 
@@ -398,8 +407,8 @@ public class MyGameGUI implements Runnable {
 
 
 	/****private  data *****/
-	
-	private static long _delay = 0;
+
+	private static long _delay = 60;
 	private Thread _t;
 	private AutomaticPlayer _auto;
 	private ManualPlayer _manual;
