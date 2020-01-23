@@ -65,7 +65,6 @@ public class GameAlgo {
 				f_highest = list.get(i);
 			}
 		}
-		//f_highest.setIsTarget(true);
 		return f_highest;
 	}
 
@@ -147,54 +146,7 @@ public class GameAlgo {
 			return true;
 		return false;
 	}
-	
 
-	
-	/**
-	 * this method decide if a robot should take a fruit or not by checking bound(nodes number)
-	 * @param robot_num
-	 * @param robot_id
-	 * @param f - fruit
-	 * @param numOfnodes
-	 * @return true fruit is in the right area else false
-	 */
-	public boolean TeamWork_nodesNum(int robot_num, int robot_id, Fruits f) {
-		if(f == null) {
-			System.out.println("kombia");
-			return false;
-		}
-		// bound could be odd
-		int bound = (getGraphAlgo().get_Dgraph().nodeSize()+1)/robot_num;
-		
-		int fruitDestNode = nearestNode(f)[1];
-		System.out.println(fruitDestNode);
-		if(bound * (robot_id+1) > fruitDestNode && bound * robot_id <= fruitDestNode) {
-			return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * this method decide if a robot should take a fruit or not by checking bound
-	 * @param robot_num
-	 * @param robot_id
-	 * @param f - fruit
-	 * @param numOfnodes
-	 * @return true fruit is in the right area else false
-	 */
-	public boolean TeamWork_areas(int robot_num, int robot_id, Fruits f) {
-		if(f == null) {
-			return false;
-		}
-		// bound could be odd
-		Range range = getGraphAlgo().get_Dgraph().GraphScaleX();
-		double area = range.get_length()/robot_num;
-		double fruitDestNode = getGraphAlgo().get_Dgraph().getNode(nearestNode(f)[1]).getLocation().x();
-		if(range.get_min() + area * (robot_id+1) >= fruitDestNode && range.get_min() + area * (robot_id) < fruitDestNode) {
-			return true;
-		}
-		return false;
-	}
 
 
 
