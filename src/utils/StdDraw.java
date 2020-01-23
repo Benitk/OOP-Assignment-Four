@@ -845,15 +845,16 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("File");
 		JMenu menu1 = new JMenu("DB");
-		JMenu menu2 = new JMenu("Set ID");
+		JMenu menu2 = new JMenu("set");
 		menuBar.add(menu);
 		menuBar.add(menu1);
 		menuBar.add(menu2);
-		menu2.addActionListener(std);
+		JMenuItem menuItem5 = new JMenuItem("set ID");
 		JMenuItem menuItem4 = new JMenuItem("my best scores");
 		JMenuItem menuItem2 = new JMenuItem("numbers of game and current level");
 		JMenuItem menuItem3 = new JMenuItem("My rating in the class");
 		JMenuItem menuItem1 = new JMenuItem("Save...");
+		menuItem5.addActionListener(std);
 		menuItem1.addActionListener(std);
 		menuItem2.addActionListener(std);
 		menuItem3.addActionListener(std);
@@ -864,6 +865,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		menu1.add(menuItem2);
 		menu1.add(menuItem3);
 		menu1.add(menuItem4);
+		menu2.add(menuItem5);
 		return menuBar;
 	}
 
@@ -1840,13 +1842,15 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 
 		}
 		if(e.getActionCommand()=="numbers of game and current level") {
+			
 			JOptionPane.showMessageDialog(null,"please wait the few second the table is update....");
 			DBscore.myscore(DBscore.getID());
 			JOptionPane.showMessageDialog(frame,"you played: "+DBscore.getCountGame()+" games \n"
 					+ "your level is: "+DBscore.getMyLevel());
 
 		}
-		if(e.getActionCommand()=="Set ID") {
+		if(e.getActionCommand()=="set ID") {
+			System.out.println("work");
 			String m = JOptionPane.showInputDialog("insert ID");
 			if(isNumericArray(m))
 				DBscore.setID(Integer.parseInt(m));

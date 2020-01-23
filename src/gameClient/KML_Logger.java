@@ -2,6 +2,7 @@ package gameClient;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 import dataStructure.DGraph;
 import dataStructure.node_data;
@@ -260,7 +262,7 @@ public class KML_Logger {
 			}
 			return output;
 		}
-	
+
 	
 	
 	/**** private data *****/

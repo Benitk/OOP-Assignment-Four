@@ -38,9 +38,11 @@ public class MyGameGUI implements Runnable {
 	 * init the game by getting input from user about the scenario number and type of game(manual or auto)
 	 */
 	public MyGameGUI() {
+
 		int scenario = StdDraw.dialogScenario();
 		int ID=StdDraw.insertID();
-		Game_Server.login(ID);
+		DBscore.setID(ID);
+		Game_Server.login(315026807);
 		game_service game = Game_Server.getServer(scenario); // you have [0,23] games
 
 		// user choice of game type (manual or automatic)
@@ -105,7 +107,7 @@ public class MyGameGUI implements Runnable {
 				getAutoPlayer().moveRobotsAuto();
 
 				try{Thread.sleep(Delay());} catch(InterruptedException e){}
-				System.out.println(Delay());
+				
 			}else {
 				getGame().move();
 				getManual().moveRobotsGUI();
@@ -356,8 +358,6 @@ public class MyGameGUI implements Runnable {
 	}
 	
 
-
-
 	public Graph_Algo getGraphAlgo() {
 		return _graphAlgo;
 	}
@@ -397,8 +397,8 @@ public class MyGameGUI implements Runnable {
 
 
 	/****private  data *****/
-
-	private static long _delay = 50;
+	
+	private static long _delay = 0;
 	private Thread _t;
 	private AutomaticPlayer _auto;
 	private ManualPlayer _manual;

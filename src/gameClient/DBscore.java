@@ -13,7 +13,7 @@ public class DBscore {
 	private static int level[]= {0,1,3,5,9,11,13,16,19,20,23};
 	private static int move[]= {290,580,580,500,580,580,580,290,580,290,1140};
 	private static int grade[]= {145,450,720,570,510,1050,310,235,250,200,1000};
-	private static int ID=315026807;
+	private static int ID;
 	private static int MyLevel;
 	private static Object[][] myrecord=new Object [11][2];
 	private static Object[][] myplace= {{0,0},{1,0},{3,0},{5,0},{9,0},{11,0},{13,0},{16,0},{19,0},{20,0},{23,0}};
@@ -151,6 +151,8 @@ public class DBscore {
 	 * update my score in all the levels,my number of games,and my level.
 	 */
 	public static void myscore(int id) {
+		for(int i=0;i<myrecord.length;i++)
+			myrecord[i][1]=0;
 		int countgame=0;
 		int mylevel=0;
 		for(int i=0;i<level.length;i++) {
@@ -172,8 +174,10 @@ public class DBscore {
 						getMyrecord()[i][0]=level[i];
 
 					}
+					
+						
 					if(resultSet.getInt("score")>grade[i])
-						mylevel=i+1;
+						mylevel=level[i];
 				}
 				resultSet.close();
 				statement.close();		
