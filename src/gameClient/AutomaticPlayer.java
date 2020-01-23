@@ -68,7 +68,7 @@ public class AutomaticPlayer {
 					}
 
 					// if there is only one robot chase after most value fruit
-					if(r.getSpeed() < 3 && log.size() < 2) {
+					if(r.getSpeed() < 3 && getGUI().getRobList().size() < 2) {
 						getGUI().getGame().chooseNextEdge(i, nextValueAuto(r.getSrc(), i));
 
 					}
@@ -83,7 +83,7 @@ public class AutomaticPlayer {
 					robNodeList_size = r.getNextDest().size();
 
 					// fruit change is place or other robot took it - clear nextDest list
-					if(r.getNextDest().get(robNodeList_size - 1).getKey() != fruitLocation[1] || r.getNextDest().get(robNodeList_size - 1).getKey() != fruitLocation[0]) {
+					if(r.getNextDest().get(robNodeList_size - 1).getKey() != fruitLocation[1]) {
 						r.getTarget().setIsTarget(false);
 						r.setTarget(null);
 						r.getNextDest().clear();
