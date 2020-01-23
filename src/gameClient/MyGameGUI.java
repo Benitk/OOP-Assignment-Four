@@ -38,7 +38,6 @@ public class MyGameGUI implements Runnable {
 	 * init the game by getting input from user about the scenario number and type of game(manual or auto)
 	 */
 	public MyGameGUI() {
-		Game_Server.login(315026807);
 		int scenario = StdDraw.dialogScenario();
 		int ID=StdDraw.insertID();
 		Game_Server.login(ID);
@@ -158,15 +157,12 @@ public class MyGameGUI implements Runnable {
 			}
 			else if(r.getSpeed()==5) {
 				StdDraw.picture(r.getPosX(), r.getPosY(), "icons\\p" + (r.getId()+5) + ".png");
-
-
 			}
 			else
 				StdDraw.picture(r.getPosX(), r.getPosY(), "icons\\p" + r.getId() + ".png");
 
 		}
 	}
-
 
 	/**
 	 * drawFruits using pictures from icons folder
@@ -305,7 +301,7 @@ public class MyGameGUI implements Runnable {
 			for(int f = 0; f < getFruitList().size(); f++) {
 				fruitEdge = getAutoPlayer().getGameAlgo().nearestNode(getFruitList().get(f));
 				if(fruitEdge[0] == getRobList().get(r).getSrc() || fruitEdge[1] == getRobList().get(r).getSrc())
-					return lowest/(2);
+					return 15;
 			}
 		}
 		return lowest;
@@ -359,9 +355,6 @@ public class MyGameGUI implements Runnable {
 		MGP.start(loop);
 	}
 	
-	public static void main(String[] args) {
-		MyGameGUI gui = new MyGameGUI();
-	}
 
 
 
@@ -405,7 +398,7 @@ public class MyGameGUI implements Runnable {
 
 	/****private  data *****/
 
-	private static long _delay = 60;
+	private static long _delay = 50;
 	private Thread _t;
 	private AutomaticPlayer _auto;
 	private ManualPlayer _manual;

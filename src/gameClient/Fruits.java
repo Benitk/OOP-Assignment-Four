@@ -7,7 +7,6 @@ public class Fruits {
 
 	public Fruits(String f) {
 		init(f);
-		//setIsTarget(false);
 	}
 	
 	
@@ -17,7 +16,6 @@ public class Fruits {
 		setValue(0);
 		setPosX(0);
 		setPosY(0);
-		//setIsTarget(false);
 	}
 
 
@@ -44,7 +42,6 @@ public class Fruits {
 				setType(type);
 				setPosX(Double.parseDouble(split[0]));
 				setPosY(Double.parseDouble(split[1]));
-			//	setIsTarget(false);
 
 				
 		} catch (JSONException e) {e.printStackTrace();}
