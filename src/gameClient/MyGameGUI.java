@@ -19,7 +19,6 @@ import org.json.JSONObject;
 import Server.Game_Server;
 import Server.game_service;
 import algorithms.Graph_Algo;
-import utils.Point3D;
 import utils.Range;
 import utils.StdDraw;
 import dataStructure.DGraph;
@@ -94,7 +93,6 @@ public class MyGameGUI implements Runnable {
 		this.drawRobots();
 		this.drawFruits();
 		StdDraw.show();
-		// StdDraw.pause(50);
 	}
 
 	/**
@@ -103,7 +101,6 @@ public class MyGameGUI implements Runnable {
 	@Override
 	public void run() {
 		getGame().startGame();
-		//double time = getGame().timeToEnd(); 
 		while(getGame().isRunning()) {
 			if(getType() == 1) {
 				getAutoPlayer().moveRobotsAuto();

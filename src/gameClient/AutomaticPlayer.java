@@ -181,16 +181,6 @@ public class AutomaticPlayer {
 			int[] nextNode = new int[2];
 
 			getGUI().setRobList(new ArrayList<Robots>(Robot_num));
-			//16
-			//getGUI().getGame().addRobot(12);
-			//getGUI().getGame().addRobot(16);
-
-			//20
-			//getGUI().getGame().addRobot(40);
-			//getGUI().getGame().addRobot(19);
-			//getGUI().getGame().addRobot(1);
-			// one robot
-
 			if (Robot_num == 1) { 
 				Fruits f = getGameAlgo().mostValue(getGUI().getFruitList());
 				nextNode = getGameAlgo().nearestNode(f);
