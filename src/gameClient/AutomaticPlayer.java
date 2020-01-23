@@ -58,6 +58,8 @@ public class AutomaticPlayer {
 
 				// kml robot placemark
 				getGUI().getKml().Placemark(r.getId(), r.getPosX(), r.getPosY(), getGUI().getKml().currentTime());
+				
+				
 				if (r.getDest() == -1 && r.getNextDest().isEmpty()) {
 					if(r.getTarget() != null) {
 						r.getTarget().setIsTarget(false);
