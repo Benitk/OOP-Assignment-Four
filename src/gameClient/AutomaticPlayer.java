@@ -58,15 +58,21 @@ public class AutomaticPlayer {
 
 				// kml robot placemark
 				getGUI().getKml().Placemark(r.getId(), r.getPosX(), r.getPosY(), getGUI().getKml().currentTime());
+				
+				
 				if (r.getDest() == -1 && r.getNextDest().isEmpty()) {
 					if(r.getTarget() != null) {
 						r.getTarget().setIsTarget(false);
 						r.setTarget(null);
 
 					}
+
+					// if there is only one robot chase after most value fruit
 					if(r.getSpeed() < 3 && getGUI().getRobList().size() < 2) {
 						getGUI().getGame().chooseNextEdge(i, nextValueAuto(r.getSrc(), i));
+
 					}
+					// chase after the closest fruit
 					else {
 						getGUI().getGame().chooseNextEdge(i, ClosestNodeAuto(r.getSrc(), i));
 					}
@@ -76,12 +82,13 @@ public class AutomaticPlayer {
 					fruitLocation = getGameAlgo().nearestNode(r.getTarget());
 					robNodeList_size = r.getNextDest().size();
 
-					// fruit change is place or other robot took it clear nextDest list
-					if(r.getNextDest().get(robNodeList_size - 1).getKey() != fruitLocation[1] || r.getNextDest().get(robNodeList_size - 1).getKey() != fruitLocation[0]) {
+					// fruit change is place or other robot took it - clear nextDest list
+					if(r.getNextDest().get(robNodeList_size - 1).getKey() != fruitLocation[1]) {
 						r.getTarget().setIsTarget(false);
 						r.setTarget(null);
 						r.getNextDest().clear();
 					}
+					//get next dest from list
 					else {
 						getGUI().getGame().chooseNextEdge(i, r.getNextDest().get(0).getKey());
 						r.getNextDest().remove(0);
@@ -103,7 +110,8 @@ public class AutomaticPlayer {
 	private int ClosestNodeAuto(int src, int rob_id) {
 		int ans[] = new int[2];
 		List<node_data> nextdest = new ArrayList<node_data>();
-		Fruits f = getGameAlgo().ClosestFruitbyShortestpath(getGUI().getFruitList(), getGUI().getRobList().get(rob_id));
+		Fruits f = null;
+		f = getGameAlgo().ClosestFruitbyShortestpath(getGUI().getFruitList(), getGUI().getRobList().get(rob_id));		
 		if (f != null){
 			ans = getGameAlgo().nearestNode(f);
 			if (!(src == ans[0])) {
@@ -114,6 +122,7 @@ public class AutomaticPlayer {
 				getGUI().getRobList().get(rob_id).getNextDest().addAll(nextdest);
 				getGUI().getRobList().get(rob_id).getNextDest().add(getGUI().getGraphAlgo().get_Dgraph().getNode(ans[1]));
 				getGUI().getRobList().get(rob_id).setTarget(f);
+
 				f.setIsTarget(true);
 				return getGUI().getRobList().get(rob_id).getNextDest().get(0).getKey();
 
@@ -196,19 +205,17 @@ public class AutomaticPlayer {
 							f.setIsTarget(true);
 							found = true;
 						} 
-					} // didnt found fruit in current robot area 
+					} // didnt found fruit random middle starting point 
 					if(!found) { 
 						int bound = (getGUI().getGraphAlgo().get_Dgraph().nodeSize() + 1) / Robot_num; 
-						// random middle starting point 
 						getGUI().getGame().addRobot(bound / 2); 
 					}
 				}
 			}
-
-
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		
 		// set fruits targets to false
 		Iterator<Fruits> f_iter = getGUI().getFruitList().iterator();
 		while(f_iter.hasNext()) {

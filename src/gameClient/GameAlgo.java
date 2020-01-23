@@ -78,7 +78,6 @@ public class GameAlgo {
 	 */
 	public int[] nearestNode(Fruits f) {
 		if(f == null) {
-			System.out.println("found null");
 			return null;
 		}
 
@@ -142,7 +141,7 @@ public class GameAlgo {
 	 * @return
 	 */
 	private boolean distanceTriangle(Point3D n1, Point3D n2, Point3D f) {
-		if (n1.distance2D(f) + f.distance2D(n2) - eps <= n1.distance2D(n2))
+		if (n1.distance2D(f) + n2.distance2D(f) - eps <= n1.distance2D(n2))
 			return true;
 		return false;
 	}
@@ -152,7 +151,7 @@ public class GameAlgo {
 
 	/** private data ***/
 	private Graph_Algo _graphAlgo;
-	private final double eps = 0.000001;
+	private final double eps = 0.0000001;
 
 
 	/** getter/setter ***/

@@ -38,10 +38,10 @@ public class MyGameGUI implements Runnable {
 	 * init the game by getting input from user about the scenario number and type of game(manual or auto)
 	 */
 	public MyGameGUI() {
-		
+
 		int scenario = StdDraw.dialogScenario();
-//		int ID=StdDraw.insertID();
-//		DBscore.setID(ID);
+		int ID=StdDraw.insertID();
+		DBscore.setID(ID);
 		Game_Server.login(315026807);
 		game_service game = Game_Server.getServer(scenario); // you have [0,23] games
 
@@ -106,8 +106,8 @@ public class MyGameGUI implements Runnable {
 			if(getType() == 1) {
 				getAutoPlayer().moveRobotsAuto();
 
-				try{Thread.sleep(60);} catch(InterruptedException e){}
-				//System.out.println(Delay());
+				try{Thread.sleep(Delay());} catch(InterruptedException e){}
+				
 			}else {
 				getGame().move();
 				getManual().moveRobotsGUI();
@@ -140,8 +140,7 @@ public class MyGameGUI implements Runnable {
 			e.printStackTrace();
 		}
 		if(StdDraw.dialogKML() == 0) {
-			//getGame().sendKML(getKml().printKml(getKml().getDocument()));
-			getGame().sendKML(getKml().printKml(getKml().fromtexttodoc()));
+			getGame().sendKML(getKml().printKml(getKml().getDocument()));
 			getKml().KMLtoFile();
 		}
 	}
@@ -160,15 +159,12 @@ public class MyGameGUI implements Runnable {
 			}
 			else if(r.getSpeed()==5) {
 				StdDraw.picture(r.getPosX(), r.getPosY(), "icons\\p" + (r.getId()+5) + ".png");
-
-
 			}
 			else
 				StdDraw.picture(r.getPosX(), r.getPosY(), "icons\\p" + r.getId() + ".png");
 
 		}
 	}
-
 
 	/**
 	 * drawFruits using pictures from icons folder
@@ -307,7 +303,7 @@ public class MyGameGUI implements Runnable {
 			for(int f = 0; f < getFruitList().size(); f++) {
 				fruitEdge = getAutoPlayer().getGameAlgo().nearestNode(getFruitList().get(f));
 				if(fruitEdge[0] == getRobList().get(r).getSrc() || fruitEdge[1] == getRobList().get(r).getSrc())
-					return lowest/(2);
+					return 15;
 			}
 		}
 		return lowest;
@@ -361,6 +357,7 @@ public class MyGameGUI implements Runnable {
 		MGP.start(loop);
 	}
 	
+
 	public Graph_Algo getGraphAlgo() {
 		return _graphAlgo;
 	}
@@ -400,9 +397,8 @@ public class MyGameGUI implements Runnable {
 
 
 	/****private  data *****/
-
-
-	private static long _delay = 60;
+	
+	private static long _delay = 0;
 	private Thread _t;
 	private AutomaticPlayer _auto;
 	private ManualPlayer _manual;
