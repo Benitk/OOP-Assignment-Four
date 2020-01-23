@@ -40,9 +40,9 @@ public class MyGameGUI implements Runnable {
 	public MyGameGUI() {
 		
 		int scenario = StdDraw.dialogScenario();
-		int ID=StdDraw.insertID();
-		DBscore.setID(ID);
-		Game_Server.login(ID);
+//		int ID=StdDraw.insertID();
+//		DBscore.setID(ID);
+		Game_Server.login(315026807);
 		game_service game = Game_Server.getServer(scenario); // you have [0,23] games
 
 		// user choice of game type (manual or automatic)
@@ -106,8 +106,8 @@ public class MyGameGUI implements Runnable {
 			if(getType() == 1) {
 				getAutoPlayer().moveRobotsAuto();
 
-				try{Thread.sleep(Delay());} catch(InterruptedException e){}
-				System.out.println(Delay());
+				try{Thread.sleep(60);} catch(InterruptedException e){}
+				//System.out.println(Delay());
 			}else {
 				getGame().move();
 				getManual().moveRobotsGUI();
@@ -140,7 +140,8 @@ public class MyGameGUI implements Runnable {
 			e.printStackTrace();
 		}
 		if(StdDraw.dialogKML() == 0) {
-			getGame().sendKML(getKml().printKml(getKml().getDocument()));
+			//getGame().sendKML(getKml().printKml(getKml().getDocument()));
+			getGame().sendKML(getKml().printKml(getKml().fromtexttodoc()));
 			getKml().KMLtoFile();
 		}
 	}
@@ -399,6 +400,7 @@ public class MyGameGUI implements Runnable {
 
 
 	/****private  data *****/
+
 
 	private static long _delay = 60;
 	private Thread _t;

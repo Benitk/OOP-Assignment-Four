@@ -2,6 +2,7 @@ package gameClient;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 import dataStructure.DGraph;
 import dataStructure.node_data;
@@ -260,6 +262,32 @@ public class KML_Logger {
 			}
 			return output;
 		}
+	 public Document fromtexttodoc() {
+		//Get Document Builder
+		 Document document =null;
+		 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		 DocumentBuilder builder;
+		try {
+			builder = factory.newDocumentBuilder();
+	
+		  
+		 //Build Document
+		  try {
+			document = builder.parse(new File("data\\kml\\19 moves 574 score 273 - delay 55.kml"));
+			 document.getDocumentElement().normalize();
+		} catch (SAXException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		  
+		 //Normalize the XML Structure; It's just too important !!
+		
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 return document;
+	 }
 	
 	
 	
