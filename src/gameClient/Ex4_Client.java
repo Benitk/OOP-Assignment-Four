@@ -41,7 +41,7 @@ public class Ex4_Client implements Runnable{
 	
 	@Override
 	public void run() {
-		int scenario_num = 3; // current "stage is 9, can play[0,9], can NOT 10 or above
+		int scenario_num = 0; // current "stage is 9, can play[0,9], can NOT 10 or above
 		int id = 999;
 		Game_Server.login(id);
 		game_service game = Game_Server.getServer(scenario_num); // you have [0,23] games
@@ -56,12 +56,12 @@ public class Ex4_Client implements Runnable{
 		int ind=0;
 		long dt=200;
 		int jj = 0;
-		/*
-		 * while(game.isRunning()) { moveRobots(game, gg); try { List<String> stat =
-		 * game.getRobots(); for(int i=0;i<stat.size();i++) {
-		 * System.out.println(jj+") "+stat.get(i)); } ind++; Thread.sleep(dt); jj++; }
-		 * catch(Exception e) { e.printStackTrace(); } }
-		 */
+		
+		  while(game.isRunning()) { moveRobots(game, gg); try { List<String> stat =
+		  game.getRobots(); for(int i=0;i<stat.size();i++) {
+		  System.out.println(jj+") "+stat.get(i)); } ind++; Thread.sleep(dt); jj++; }
+		  catch(Exception e) { e.printStackTrace(); } }
+		 
 		String res = game.toString();
 		String remark = "This string should be a KML file!!";
 		game.sendKML(remark); // Should be your KML (will not work on case -1).

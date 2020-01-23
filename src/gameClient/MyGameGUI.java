@@ -41,6 +41,7 @@ public class MyGameGUI implements Runnable {
 	public MyGameGUI() {
 		Game_Server.login(315026807);
 		int scenario = StdDraw.dialogScenario();
+		Game_Server.login(999);
 		game_service game = Game_Server.getServer(scenario); // you have [0,23] games
 
 		// user choice of game type (manual or automatic)
@@ -79,6 +80,7 @@ public class MyGameGUI implements Runnable {
 		drawRobots();
 		StdDraw.enableDoubleBuffering();
 		StdDraw.show();
+		
 
 		_t = new Thread(this);
 		_t.start();
@@ -104,6 +106,7 @@ public class MyGameGUI implements Runnable {
 		while(getGame().isRunning()) {
 			if(getType() == 1) {
 				getAutoPlayer().moveRobotsAuto();
+
 				try{Thread.sleep(Delay());} catch(InterruptedException e){}
 				System.out.println(Delay());
 			}else {
@@ -404,6 +407,7 @@ public class MyGameGUI implements Runnable {
 
 	/****private  data *****/
 	private static long _delay = 60;
+	private DBscore DB =new DBscore();
 	private Thread _t;
 	private AutomaticPlayer _auto;
 	private ManualPlayer _manual;

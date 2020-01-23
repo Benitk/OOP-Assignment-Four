@@ -73,7 +73,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.KeyStroke;
+
+import gameClient.DBscore;
 
 
 /**
@@ -738,13 +742,13 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 			return 0;
 		}
 	}
-	
-/**
- * asking user to place the robot on the graph (only in manual mode)
- * @param id - robot id
- * @param size - num of nodes
- * @return int - node location for each robot
- */
+
+	/**
+	 * asking user to place the robot on the graph (only in manual mode)
+	 * @param id - robot id
+	 * @param size - num of nodes
+	 * @return int - node location for each robot
+	 */
 	public static int dialogRobots(int id, int size){
 		try {
 
@@ -762,53 +766,53 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 			return id;
 		}
 	}
-	
+
 	/**
 	 * asking user his choice of game manual or auto
 	 * @return int - 0 - manual ,1 - auto
 	 */
 	public static int dialogType(){
 		try {
-	        Object[] options = {"Manual game", "Auto game"};
-	        int x = JOptionPane.showOptionDialog(null, "Please choose type game\n"
-	        		+ "Automatic game is default option",
-	                "",
-	                JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+			Object[] options = {"Manual game", "Auto game"};
+			int x = JOptionPane.showOptionDialog(null, "Please choose type game\n"
+					+ "Automatic game is default option",
+					"",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 
-			  if(x == -1)
-				  return 1;
-			  
-			  return x;
-	      
+			if(x == -1)
+				return 1;
+
+			return x;
+
 		}catch(Exception err) {
 			return 1;
 		}
 	}
-	
+
 	/**
 	 * asking user if he wants to save that game to kml file
 	 * @return int - choice of game manual or auto
 	 */
 	public static int dialogKML(){
 		try {
-	        Object[] options = {"Yes", "No"};
-	        int x = JOptionPane.showOptionDialog(null, "Do you want to save that game as kml file\n"
-	        		+ "The file will locate at Your Project under data folder\n"
-	        		+ "No is default option",
-	                "",
-	                JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+			Object[] options = {"Yes", "No"};
+			int x = JOptionPane.showOptionDialog(null, "Do you want to save that game as kml file\n"
+					+ "The file will locate at Your Project under data folder\n"
+					+ "No is default option",
+					"",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 
-	     
-			  if(x == -1)
-				  return 1;
-			  
-			  return x;
-	      
+
+			if(x == -1)
+				return 1;
+
+			return x;
+
 		}catch(Exception err) {
 			return 1;
 		}
 	}
-	
+
 	public static void ManualInstructions(){
 		JOptionPane.showMessageDialog(frame, "Manual game instructions:\n"
 				+ "to control each robot you must use the keyboard number from [0, 4] (keypad wont work!)\n"
@@ -817,11 +821,11 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 				+ "that has an edge to the current robot\n"
 				+ "Enjoy!!");
 	}
-	
-	
-/**
- * set frame visable only when call this function - false by default
- */
+
+
+	/**
+	 * set frame visable only when call this function - false by default
+	 */
 	public static void Visible() {
 		if(frame != null) frame.setVisible(true);
 	}
@@ -833,12 +837,26 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	private static JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("File");
+		JMenu menu1 = new JMenu("DB");
+		JMenu menu2 = new JMenu("Set ID");
 		menuBar.add(menu);
-		JMenuItem menuItem1 = new JMenuItem(" Save...   ");
+		menuBar.add(menu1);
+		menuBar.add(menu2);
+		menu2.addActionListener(std);
+		JMenuItem menuItem4 = new JMenuItem("my best scores");
+		JMenuItem menuItem2 = new JMenuItem("numbers of game and current level");
+		JMenuItem menuItem3 = new JMenuItem("My rating in the class");
+		JMenuItem menuItem1 = new JMenuItem("Save...");
 		menuItem1.addActionListener(std);
+		menuItem2.addActionListener(std);
+		menuItem3.addActionListener(std);
+		menuItem4.addActionListener(std);
 		menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menu.add(menuItem1);
+		menu1.add(menuItem2);
+		menu1.add(menuItem3);
+		menu1.add(menuItem4);
 		return menuBar;
 	}
 
@@ -1789,12 +1807,52 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		FileDialog chooser = new FileDialog(StdDraw.frame, "Use a .png or .jpg extension", FileDialog.SAVE);
-		chooser.setVisible(true);
-		String filename = chooser.getFile();
-		if (filename != null) {
-			StdDraw.save(chooser.getDirectory() + File.separator + chooser.getFile());
+		if(e.getActionCommand()=="Save...") {
+			FileDialog chooser = new FileDialog(StdDraw.frame, "Use a .png or .jpg extension", FileDialog.SAVE);
+			chooser.setVisible(true);
+			String filename = chooser.getFile();
+			if (filename != null) {
+				StdDraw.save(chooser.getDirectory() + File.separator + chooser.getFile());
+			}
 		}
+		if(e.getActionCommand()=="My rating in the class") {
+			JOptionPane.showMessageDialog(null,"please wait the few second the table is update....");
+			DBscore.myplaceinKita(DBscore.getID());
+			Object[] col ={"Stage","my place against the class"};
+			JTable table = new JTable(DBscore.getMyplace(),col);
+			table.setBounds(30,40,200,200);          
+			JOptionPane.showMessageDialog(frame, new JScrollPane(table));
+		}
+		if(e.getActionCommand()=="my best scores") {
+			JOptionPane.showMessageDialog(null,"please wait the few second the table is update....");
+			DBscore.myscore(DBscore.getID());
+			Object[] col ={"Stage","my best score"};
+			JTable table = new JTable(DBscore.getMyrecord(),col);
+			table.setBounds(30,40,200,200);          
+			JOptionPane.showMessageDialog(frame, new JScrollPane(table));
+
+		}
+		if(e.getActionCommand()=="numbers of game and current level") {
+			JOptionPane.showMessageDialog(null,"please wait the few second the table is update....");
+			DBscore.myscore(DBscore.getID());
+			JOptionPane.showMessageDialog(frame,"you played: "+DBscore.getCountGame()+" games \n"
+					+ "your level is: "+DBscore.getMyLevel());
+
+		}
+		if(e.getActionCommand()=="Set ID") {
+			String m = JOptionPane.showInputDialog("insert ID");
+			if(isNumericArray(m))
+				DBscore.setID(Integer.parseInt(m));
+		}
+
+	}
+	public static boolean isNumericArray(String str) {
+		if (str == null)
+			return false;
+		for (char c : str.toCharArray())
+			if (c < '0' || c > '9')
+				return false;
+	    return true;
 	}
 
 
@@ -1982,8 +2040,8 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	public static void setPlayer(int n) {
 		player=n;
 	}
-	
-	
+
+
 
 
 	/**
