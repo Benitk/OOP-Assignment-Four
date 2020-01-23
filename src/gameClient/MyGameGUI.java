@@ -38,9 +38,10 @@ public class MyGameGUI implements Runnable {
 	 * init the game by getting input from user about the scenario number and type of game(manual or auto)
 	 */
 	public MyGameGUI() {
-		Game_Server.login(315026807);
+		
 		int scenario = StdDraw.dialogScenario();
 		int ID=StdDraw.insertID();
+		DBscore.setID(ID);
 		Game_Server.login(ID);
 		game_service game = Game_Server.getServer(scenario); // you have [0,23] games
 
@@ -359,12 +360,6 @@ public class MyGameGUI implements Runnable {
 		MGP.start(loop);
 	}
 	
-	public static void main(String[] args) {
-		MyGameGUI gui = new MyGameGUI();
-	}
-
-
-
 	public Graph_Algo getGraphAlgo() {
 		return _graphAlgo;
 	}
