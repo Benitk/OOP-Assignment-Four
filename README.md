@@ -1,8 +1,9 @@
+**More details inside the project wiki**
+
+
 Our project is about creating a game with GUI.
 
 This game based on a our previous project, that you are more then welcome to explore  https://github.com/Benitk/OOP-Assignment-Two
-
-More details inside the project wiki
 
 All the data about the robot ,the fruit ,the nodes and the edges are read from the server as Json string.
 
